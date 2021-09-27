@@ -1,10 +1,13 @@
 # -----------------------------------------------------------------------------
 # - File              usbswsdk.py
 # - Owner             Zhengkun Li
-# - Version           1.0
+# - Version           1.1
 # - Date              09.06.2021
 # - Classification    Python SDK
 # - Brief             Python SDK for ZD USB Switch
+# - History        
+#       2021.06.09    Initial version.                   Zhengkun Li
+#       2021.09.27    Add set_relay/set_power commands.  Yu-Ling Xie
 # ----------------------------------------------------------------------------- 
 
 import serial
@@ -43,7 +46,7 @@ def detect_comports():
 def get_version(dev_port: str): 
     time_start=time.time()  
     serialPort = serial.Serial(port=dev_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-    serialPort.write(b"<GET_SW_VERSION{}>")
+    serialPort.write("<GET_SW_VERSION{}>")
     serialString = ""  # Used to hold data coming over UART
     
     while 1 :
@@ -68,7 +71,7 @@ def get_version(dev_port: str):
 def reboot_sys(dev_port: str):
     time_start=time.time() 
     serialPort = serial.Serial(port=dev_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-    serialPort.write(b"<REBOOT_SYS{}>")
+    serialPort.write("<REBOOT_SYS{}>")
     serialString = ""  # Used to hold data coming over UART
 
     while 1 :
@@ -95,7 +98,7 @@ def save_config(dev_port: str):
     time_start=time.time() 
     res = False
     serialPort = serial.Serial(port=dev_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-    serialPort.write(b"<SAVE_CONFIG{}>")
+    serialPort.write("<SAVE_CONFIG{}>")
     serialString = ""  # Used to hold data coming over UART
     while 1 :
         time_end=time.time()
@@ -125,7 +128,7 @@ def clr_config(dev_port: str):
     time_start=time.time() 
     res = False
     serialPort = serial.Serial(port=dev_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-    serialPort.write(b"<CLEAR_CONFIG{}>")
+    serialPort.write("<CLEAR_CONFIG{}>")
     serialString = ""  # Used to hold data coming over UART
     while 1 :
         time_end=time.time()
@@ -153,7 +156,7 @@ def clr_config(dev_port: str):
 def disp_config(dev_port: str): 
     time_start=time.time()  
     serialPort = serial.Serial(port=dev_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-    serialPort.write(b"<DISP_CONFIG{}>")
+    serialPort.write("<DISP_CONFIG{}>")
     res = False
     serialString = ""  # Used to hold data coming over UART
     while 1 :
@@ -180,7 +183,7 @@ def disp_config(dev_port: str):
 def set_host_port(dev_port: str,port_num:int): 
     time_start=time.time()  
     serialPort = serial.Serial(port=dev_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-    serialPort.write( bytes(f"<SET_HOST_PORT{{{port_num}}}>", encoding = "utf8"))
+    serialPort.write( bytes("<SET_HOST_PORT{{{port_num}}}>", encoding = "utf8"))
     serialString = ""  # Used to hold data coming over UART
     res = False
     while 1 :
@@ -236,7 +239,7 @@ def get_host_port(dev_port: str):
 def set_dev_port(dev_port: str,port_num:int): 
     time_start=time.time()  
     serialPort = serial.Serial(port=dev_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-    serialPort.write( bytes(f"<SET_DEVICE_PORT{{{port_num}}}>", encoding = "utf8"))
+    serialPort.write( bytes("<SET_DEVICE_PORT{{{port_num}}}>", encoding = "utf8"))
     serialString = ""  # Used to hold data coming over UART
     res = False
     while 1 :
@@ -293,7 +296,7 @@ def get_dev_port(dev_port: str):
 def set_relay_mask(dev_port: str,mask:int): 
     time_start=time.time()  
     serialPort = serial.Serial(port=dev_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-    serialPort.write( bytes(f"<SET_RELAY_MASK{{{hex(mask)}}}>", encoding = "utf8"))
+    serialPort.write( bytes("<SET_RELAY_MASK{{{hex(mask)}}}>", encoding = "utf8"))
     serialString = ""  # Used to hold data coming over UART
     res = False
     while 1 :
@@ -354,7 +357,7 @@ def get_relay_mask(dev_port: str):
 def set_pwr_mask(dev_port: str,mask:int): 
     time_start=time.time()  
     serialPort = serial.Serial(port=dev_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-    serialPort.write( bytes(f"<SET_POWER_MASK{{{hex(mask)}}}>", encoding = "utf8"))
+    serialPort.write( bytes("<SET_POWER_MASK{{{hex(mask)}}}>", encoding = "utf8"))
     serialString = ""  # Used to hold data coming over UART
     res = False
     while 1 :
@@ -404,3 +407,121 @@ def get_pwr_mask(dev_port: str):
                 print(serialString)
             except:
                 pass  
+
+################################################################################
+# Description : Set Relay                                                      #
+# Argument:dev_port: str, relay_port: int, control: int                                       #                             
+# Returns:                                                                     #
+# Set the control of the specific relay. 0-open, 1-close                       #
+# Relay1 to Relay4. : bool                                                     #    
+################################################################################ 
+def set_relay(dev_port: str,relay_port: int,control: int): 
+    time_start=time.time()  
+    serialPort = serial.Serial(port=dev_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
+    serialPort.write( bytes("<SET_RELAY{{{port}},{{control}}}>", encoding = "utf8"))
+    serialString = ""  # Used to hold data coming over UART
+    res = False
+    while 1 :
+        time_end=time.time()
+        if (time_end-time_start)>1:
+            return res
+        # Wait until there is data waiting in the serial buffer
+        if serialPort.in_waiting > 0:
+            # Read data out of the buffer until a carraige return / new line is found
+            serialString = serialPort.readline().decode("Ascii")
+            if "Return: [SET_RELAY{{{port}},{{control}}}]" in serialString:
+                res =  True
+            # Print the contents of the serial data
+            try:
+                print(serialString)
+            except:
+                pass  
+
+################################################################################
+# Description : Get Relay                                                      #
+# Argument: dev_port: str, relay_port: int                                     #                             
+# Returns:                                                                     #
+# Get the current control of Relay                                             #    
+################################################################################ 
+def get_relay(dev_port: str,relay_port: int): 
+    time_start=time.time()  
+    serialPort = serial.Serial(port=dev_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
+    serialPort.write( bytes("<GET_RELAY{{{relay_port}}}>", encoding = "utf8"))
+    serialString = ""  # Used to hold data coming over UART
+    res = None
+    while 1 :
+        time_end=time.time()
+        if (time_end-time_start)>1:
+            return res
+        # Wait until there is data waiting in the serial buffer
+        if serialPort.in_waiting > 0:
+
+            # Read data out of the buffer until a carraige return / new line is found
+            serialString = serialPort.readline().decode("Ascii")
+            if "Return: [GET_RELAY{" in serialString:               
+                res = int(serialString.strip().lstrip('Return: [GET_RELAY{').rstrip("}]"),0)
+            # Print the contents of the serial data
+            try:
+                print(serialString)
+            except:
+                pass    
+
+################################################################################
+# Description : Set Power Supply                                               #
+# Argument: dev_port: str , power_device: int, control: int                    #                             
+# Description                                                                  #  
+# Set the Device Port enable to power supply.                                  #
+#     control=0: power off; control=1: power on                                #
+# e.g. <SET_POWER{1, 0}> , device1 is set to power down.                       #
+################################################################################     
+def set_pwr(dev_port: str,power_device: int,control: int): 
+    time_start=time.time()  
+    serialPort = serial.Serial(port=dev_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
+    serialPort.write( bytes("<SET_POWER{{{power_device}},{{control}}}>", encoding = "utf8"))
+    serialString = ""  # Used to hold data coming over UART
+    res = False
+    while 1 :
+        time_end=time.time()
+        if (time_end-time_start)>1:
+            return res
+        # Wait until there is data waiting in the serial buffer
+        if serialPort.in_waiting > 0:
+            # Read data out of the buffer until a carraige return / new line is found
+            serialString = serialPort.readline().decode("Ascii")
+            if f"Return: [SET_POWER{{{power_device}},{{control}}}]" in serialString:
+                res =  True
+            # Print the contents of the serial data
+            try:
+                print(serialString)
+            except:
+                pass 
+
+################################################################################
+# Description : Get Power Supply Status                                        #
+# Argument: power_device: int                                                  #                             
+# Description                                                                  #  
+# Get the current control status of the Device Port                            #
+################################################################################  
+def get_pwr(dev_port: str,power_device: int): 
+    time_start=time.time()  
+    serialPort = serial.Serial(port=dev_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
+    serialPort.write( bytes("<GET_POWER{{{power_device}}}>", encoding = "utf8"))
+    serialString = ""  # Used to hold data coming over UART
+    res = None
+    while 1 :
+        time_end=time.time()
+        if (time_end-time_start)>1:
+            return res
+        # Wait until there is data waiting in the serial buffer
+        if serialPort.in_waiting > 0:
+
+            # Read data out of the buffer until a carraige return / new line is found
+            serialString = serialPort.readline().decode("Ascii")
+            if "Return: [GET_POWER{" in serialString:               
+                res = int(serialString.strip().lstrip('Return: [GET_POWER{').rstrip("}]"),0)
+            # Print the contents of the serial data
+            try:
+                print(serialString)
+            except:
+                pass  
+
