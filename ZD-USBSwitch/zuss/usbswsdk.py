@@ -418,7 +418,7 @@ def get_pwr_mask(dev_port: str):
 def set_relay(dev_port: str,relay_port: int,control: int): 
     time_start=time.time()  
     serialPort = serial.Serial(port=dev_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-    serialPort.write( bytes(f"<SET_RELAY{{{port}},{{control}}}>", encoding = "utf8"))
+    serialPort.write( bytes('<SET_RELAY{'+str(relay_port)+','+str(control)+'}>', encoding = "utf8"))
     serialString = ""  # Used to hold data coming over UART
     res = False
     while 1 :
@@ -429,7 +429,7 @@ def set_relay(dev_port: str,relay_port: int,control: int):
         if serialPort.in_waiting > 0:
             # Read data out of the buffer until a carraige return / new line is found
             serialString = serialPort.readline().decode("Ascii")
-            if "Return: [SET_RELAY{{{port}},{{control}}}]" in serialString:
+            if '[SET_RELAY{'+str(relay_port)+','+str(control)+'}]' in serialString:
                 res =  True
             # Print the contents of the serial data
             try:
@@ -446,7 +446,7 @@ def set_relay(dev_port: str,relay_port: int,control: int):
 def get_relay(dev_port: str,relay_port: int): 
     time_start=time.time()  
     serialPort = serial.Serial(port=dev_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-    serialPort.write( bytes(f"<GET_RELAY{{{relay_port}}}>", encoding = "utf8"))
+    serialPort.write( bytes('<GET_RELAY{'+str(relay_port)+'}>', encoding = "utf8"))
     serialString = ""  # Used to hold data coming over UART
     res = None
     while 1 :
@@ -458,8 +458,8 @@ def get_relay(dev_port: str,relay_port: int):
 
             # Read data out of the buffer until a carraige return / new line is found
             serialString = serialPort.readline().decode("Ascii")
-            if "Return: [GET_RELAY{" in serialString:               
-                res = int(serialString.strip().lstrip('Return: [GET_RELAY{').rstrip("}]"),0)
+            if '[GET_RELAY{' in serialString:               
+                res = int(serialString.strip().lstrip('[GET_RELAY{').rstrip("}]"),0)
             # Print the contents of the serial data
             try:
                 print(serialString)
@@ -477,7 +477,7 @@ def get_relay(dev_port: str,relay_port: int):
 def set_pwr(dev_port: str,power_device: int,control: int): 
     time_start=time.time()  
     serialPort = serial.Serial(port=dev_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-    serialPort.write( bytes(f"<SET_POWER{{{power_device}},{{control}}}>", encoding = "utf8"))
+    serialPort.write( bytes('<SET_POWER{'+str(power_device)+','+str(control)+'}>', encoding = "utf8"))
     serialString = ""  # Used to hold data coming over UART
     res = False
     while 1 :
@@ -488,7 +488,7 @@ def set_pwr(dev_port: str,power_device: int,control: int):
         if serialPort.in_waiting > 0:
             # Read data out of the buffer until a carraige return / new line is found
             serialString = serialPort.readline().decode("Ascii")
-            if f"Return: [SET_POWER{{{power_device}},{{control}}}]" in serialString:
+            if '[SET_POWER{'+str(power_device)+','+str(control)+'}]' in serialString:
                 res =  True
             # Print the contents of the serial data
             try:
@@ -505,7 +505,7 @@ def set_pwr(dev_port: str,power_device: int,control: int):
 def get_pwr(dev_port: str,power_device: int): 
     time_start=time.time()  
     serialPort = serial.Serial(port=dev_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-    serialPort.write( bytes(f"<GET_POWER{{{power_device}}}>", encoding = "utf8"))
+    serialPort.write( bytes('<GET_POWER{'+str(power_device)+'}>', encoding = "utf8"))
     serialString = ""  # Used to hold data coming over UART
     res = None
     while 1 :
@@ -517,7 +517,7 @@ def get_pwr(dev_port: str,power_device: int):
 
             # Read data out of the buffer until a carraige return / new line is found
             serialString = serialPort.readline().decode("Ascii")
-            if "Return: [GET_POWER{" in serialString:               
+            if "[GET_POWER{" in serialString:               
                 res = int(serialString.strip().lstrip('Return: [GET_POWER{').rstrip("}]"),0)
             # Print the contents of the serial data
             try:
