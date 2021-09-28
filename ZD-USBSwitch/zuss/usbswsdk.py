@@ -46,7 +46,7 @@ def detect_comports():
 def get_version(dev_port: str): 
     time_start=time.time()  
     serialPort = serial.Serial(port=dev_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-    serialPort.write("<GET_SW_VERSION{}>")
+    serialPort.write(b"<GET_SW_VERSION{}>")
     serialString = ""  # Used to hold data coming over UART
     
     while 1 :
@@ -71,7 +71,7 @@ def get_version(dev_port: str):
 def reboot_sys(dev_port: str):
     time_start=time.time() 
     serialPort = serial.Serial(port=dev_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-    serialPort.write("<REBOOT_SYS{}>")
+    serialPort.write(b"<REBOOT_SYS{}>")
     serialString = ""  # Used to hold data coming over UART
 
     while 1 :
@@ -98,7 +98,7 @@ def save_config(dev_port: str):
     time_start=time.time() 
     res = False
     serialPort = serial.Serial(port=dev_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-    serialPort.write("<SAVE_CONFIG{}>")
+    serialPort.write(b"<SAVE_CONFIG{}>")
     serialString = ""  # Used to hold data coming over UART
     while 1 :
         time_end=time.time()
@@ -128,7 +128,7 @@ def clr_config(dev_port: str):
     time_start=time.time() 
     res = False
     serialPort = serial.Serial(port=dev_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-    serialPort.write("<CLEAR_CONFIG{}>")
+    serialPort.write(b"<CLEAR_CONFIG{}>")
     serialString = ""  # Used to hold data coming over UART
     while 1 :
         time_end=time.time()
@@ -156,7 +156,7 @@ def clr_config(dev_port: str):
 def disp_config(dev_port: str): 
     time_start=time.time()  
     serialPort = serial.Serial(port=dev_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-    serialPort.write("<DISP_CONFIG{}>")
+    serialPort.write(b"<DISP_CONFIG{}>")
     res = False
     serialString = ""  # Used to hold data coming over UART
     while 1 :
@@ -183,7 +183,7 @@ def disp_config(dev_port: str):
 def set_host_port(dev_port: str,port_num:int): 
     time_start=time.time()  
     serialPort = serial.Serial(port=dev_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-    serialPort.write( bytes("<SET_HOST_PORT{{{port_num}}}>", encoding = "utf8"))
+    serialPort.write( bytes(f"<SET_HOST_PORT{{{port_num}}}>", encoding = "utf8"))
     serialString = ""  # Used to hold data coming over UART
     res = False
     while 1 :
@@ -239,7 +239,7 @@ def get_host_port(dev_port: str):
 def set_dev_port(dev_port: str,port_num:int): 
     time_start=time.time()  
     serialPort = serial.Serial(port=dev_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-    serialPort.write( bytes("<SET_DEVICE_PORT{{{port_num}}}>", encoding = "utf8"))
+    serialPort.write( bytes(f"<SET_DEVICE_PORT{{{port_num}}}>", encoding = "utf8"))
     serialString = ""  # Used to hold data coming over UART
     res = False
     while 1 :
@@ -296,7 +296,7 @@ def get_dev_port(dev_port: str):
 def set_relay_mask(dev_port: str,mask:int): 
     time_start=time.time()  
     serialPort = serial.Serial(port=dev_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-    serialPort.write( bytes("<SET_RELAY_MASK{{{hex(mask)}}}>", encoding = "utf8"))
+    serialPort.write( bytes(f"<SET_RELAY_MASK{{{hex(mask)}}}>", encoding = "utf8"))
     serialString = ""  # Used to hold data coming over UART
     res = False
     while 1 :
@@ -357,7 +357,7 @@ def get_relay_mask(dev_port: str):
 def set_pwr_mask(dev_port: str,mask:int): 
     time_start=time.time()  
     serialPort = serial.Serial(port=dev_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-    serialPort.write( bytes("<SET_POWER_MASK{{{hex(mask)}}}>", encoding = "utf8"))
+    serialPort.write( bytes(f"<SET_POWER_MASK{{{hex(mask)}}}>", encoding = "utf8"))
     serialString = ""  # Used to hold data coming over UART
     res = False
     while 1 :
@@ -418,7 +418,7 @@ def get_pwr_mask(dev_port: str):
 def set_relay(dev_port: str,relay_port: int,control: int): 
     time_start=time.time()  
     serialPort = serial.Serial(port=dev_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-    serialPort.write( bytes("<SET_RELAY{{{port}},{{control}}}>", encoding = "utf8"))
+    serialPort.write( bytes(f"<SET_RELAY{{{port}},{{control}}}>", encoding = "utf8"))
     serialString = ""  # Used to hold data coming over UART
     res = False
     while 1 :
@@ -446,7 +446,7 @@ def set_relay(dev_port: str,relay_port: int,control: int):
 def get_relay(dev_port: str,relay_port: int): 
     time_start=time.time()  
     serialPort = serial.Serial(port=dev_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-    serialPort.write( bytes("<GET_RELAY{{{relay_port}}}>", encoding = "utf8"))
+    serialPort.write( bytes(f"<GET_RELAY{{{relay_port}}}>", encoding = "utf8"))
     serialString = ""  # Used to hold data coming over UART
     res = None
     while 1 :
@@ -477,7 +477,7 @@ def get_relay(dev_port: str,relay_port: int):
 def set_pwr(dev_port: str,power_device: int,control: int): 
     time_start=time.time()  
     serialPort = serial.Serial(port=dev_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-    serialPort.write( bytes("<SET_POWER{{{power_device}},{{control}}}>", encoding = "utf8"))
+    serialPort.write( bytes(f"<SET_POWER{{{power_device}},{{control}}}>", encoding = "utf8"))
     serialString = ""  # Used to hold data coming over UART
     res = False
     while 1 :
@@ -505,7 +505,7 @@ def set_pwr(dev_port: str,power_device: int,control: int):
 def get_pwr(dev_port: str,power_device: int): 
     time_start=time.time()  
     serialPort = serial.Serial(port=dev_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-    serialPort.write( bytes("<GET_POWER{{{power_device}}}>", encoding = "utf8"))
+    serialPort.write( bytes(f"<GET_POWER{{{power_device}}}>", encoding = "utf8"))
     serialString = ""  # Used to hold data coming over UART
     res = None
     while 1 :
