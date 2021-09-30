@@ -29,10 +29,10 @@ parser.add_argument('--setrelay_mask',type=int,help='Set Relay Mask, 4bit Mask v
 parser.add_argument('--getrelay_mask',action="store_true",help='Show current Relay Mask,Bit0 to Bit3 stand for Relay1 to Relay4')
 parser.add_argument('--setpwr_mask',type=int,help='Set Power Supply Mask,Set the Mask of the Device Ports enable to power supply, Bit0 to Bit3 stand for Port1 to Port4.input from 0 to 15')
 parser.add_argument('--getpwr_mask',action="store_true",help='Show currently Power Supply Mask')
-parser.add_argument('--setrelay',type=int,help='Set Relay, relay_port, control')
-parser.add_argument('--getrelay',action="store_true",help='Show current Relay, relay_port')
-parser.add_argument('--setpwr',type=int,help='Set Power Supply, power_device, control')
-parser.add_argument('--getpwr',action="store_true",help='Show currently Power Supply, power_device')
+parser.add_argument('--setrelay',type=int,nargs=2,help='Set Relay, relay_port, control')
+parser.add_argument('--getrelay',type=int,help='Show current Relay, relay_port')
+parser.add_argument('--setpwr',type=int,nargs=2,help='Set Power Supply, power_device, control')
+parser.add_argument('--getpwr',type=int,help='Show currently Power Supply, power_device')
 if __name__ == '__main__':
     args  = parser.parse_args()
     if args.l:
@@ -107,7 +107,7 @@ if __name__ == '__main__':
         if args.port is None:
             parser.error(f"{bcolors.FAIL}-setrelay requires -P{bcolors.ENDC}")
         else:        
-            set_relay(args.port,args.setrelay)
+            set_relay(args.port,args.setrelay[0],args.setrelay[1])
     elif args.getrelay:
         if args.port is None:
             parser.error(f"{bcolors.FAIL}-getrelay requires -P{bcolors.ENDC}")
@@ -117,10 +117,10 @@ if __name__ == '__main__':
         if args.port is None:
             parser.error(f"{bcolors.FAIL}-setpwr requires -P{bcolors.ENDC}")
         else:
-            set_pwr_mask(args.port,args.setpwr)
+            set_pwr(args.port,args.setpwr[0],args.setpwr[1])
     elif args.getpwr:
         if args.port is None:
             parser.error(f"{bcolors.FAIL}-getpwr requires -P{bcolors.ENDC}")
         else:
-            get_pwr_mask(args.port,args.getpwr)
+            get_pwr(args.port,args.getpwr)
 
