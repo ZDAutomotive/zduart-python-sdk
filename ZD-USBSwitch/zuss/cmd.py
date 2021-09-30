@@ -98,8 +98,16 @@ if __name__ == '__main__':
     elif args.setrelay_mask:
         if args.port is None:
             parser.error(f"{bcolors.FAIL}-setrelay_mask requires -P{bcolors.ENDC}")
-        else:        
-            set_relay_mask(args.port,int(args.setrelay_mask,16))
+        else:
+            # hex
+            if '0x' in args.setrelay_mask:
+                set_relay_mask(args.port,int(args.setrelay_mask,16))
+            # binary
+            elif '0b' in args.setrelay_mask:
+                set_relay_mask(args.port,int(args.setrelay_mask,2))
+            # decimal
+            else:
+                set_relay_mask(args.port,int(args.setrelay_mask,10))
     elif args.getrelay_mask:
         if args.port is None:
             parser.error(f"{bcolors.FAIL}-getrelay_mask requires -P{bcolors.ENDC}")
@@ -109,7 +117,15 @@ if __name__ == '__main__':
         if args.port is None:
             parser.error(f"{bcolors.FAIL}-setpwr_mask requires -P{bcolors.ENDC}")
         else:
-            set_pwr_mask(args.port,int(args.setpwr_mask,16))
+            # hex
+            if '0x' in args.setpwr_mask:
+                set_pwr_mask(args.port,int(args.setpwr_mask,16))
+            # binary
+            elif '0b' in args.setpwr_mask:
+                set_pwr_mask(args.port,int(args.setpwr_mask,2))
+            # decimal
+            else:
+                set_pwr_mask(args.port,int(args.setpwr_mask,10))
     elif args.getpwr_mask:
         if args.port is None:
             parser.error(f"{bcolors.FAIL}-getpwr_mask requires -P{bcolors.ENDC}")
