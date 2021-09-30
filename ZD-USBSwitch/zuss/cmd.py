@@ -1,3 +1,15 @@
+# -----------------------------------------------------------------------------
+# - ZUSS -  ZD USB SWITCH SDK Python Command Line
+# - File              zuss.py
+# - Owner             Zhengkun Li
+# - Version           1.1
+# - Date              09.06.2021
+# - Classification    command line
+# - Brief             command line for ZD USB Switch
+# - History        
+#       2021.06.09    Initial version.                   Zhengkun Li
+#       2021.09.27    Add set_relay/set_power commands.  Yu-Ling Xie
+# ----------------------------------------------------------------------------- 
 from zuss import *
 import argparse
 import colorama
@@ -25,14 +37,14 @@ parser.add_argument('--sethost',type=int,help='Set enable host port,input from 1
 parser.add_argument('--gethost',action="store_true",help='Show currently enabled host port')
 parser.add_argument('--setdev',type=int,help='Set enable device port,input from 1 to 4')
 parser.add_argument('--getdev',action="store_true",help='Show currently enabled device port')
-parser.add_argument('--setrelay_mask',type=int,help='Set Relay Mask, 4bit Mask value, Bit0 to Bit3 stand for Relay1 to Relay4,input from 0 to 15')
+parser.add_argument('--setrelay_mask',type=str,help='Set Relay Mask, 4bit Mask value, Bit0 to Bit3 stand for Relay1 to Relay4,input from 0 to 15')
 parser.add_argument('--getrelay_mask',action="store_true",help='Show current Relay Mask,Bit0 to Bit3 stand for Relay1 to Relay4')
-parser.add_argument('--setpwr_mask',type=int,help='Set Power Supply Mask,Set the Mask of the Device Ports enable to power supply, Bit0 to Bit3 stand for Port1 to Port4.input from 0 to 15')
+parser.add_argument('--setpwr_mask',type=str,help='Set Power Supply Mask,Set the Mask of the Device Ports enable to power supply, Bit0 to Bit3 stand for Port1 to Port4.input from 0 to 15')
 parser.add_argument('--getpwr_mask',action="store_true",help='Show currently Power Supply Mask')
-parser.add_argument('--setrelay',type=int,nargs=2,help='Set Relay, relay_port, control')
-parser.add_argument('--getrelay',type=int,help='Show current Relay, relay_port')
-parser.add_argument('--setpwr',type=int,nargs=2,help='Set Power Supply, power_device, control')
-parser.add_argument('--getpwr',type=int,help='Show currently Power Supply, power_device')
+parser.add_argument('--setrelay',type=int,nargs=2,help='Set Relay: relay_port, control')
+parser.add_argument('--getrelay',type=int,help='Show current Relay: relay_port')
+parser.add_argument('--setpwr',type=int,nargs=2,help='Set Power Supply: power_device, control')
+parser.add_argument('--getpwr',type=int,help='Show currently Power Supply: power_device')
 if __name__ == '__main__':
     args  = parser.parse_args()
     if args.l:
@@ -87,7 +99,7 @@ if __name__ == '__main__':
         if args.port is None:
             parser.error(f"{bcolors.FAIL}-setrelay_mask requires -P{bcolors.ENDC}")
         else:        
-            set_relay_mask(args.port,args.setrelay_mask)
+            set_relay_mask(args.port,int(args.setrelay_mask,16))
     elif args.getrelay_mask:
         if args.port is None:
             parser.error(f"{bcolors.FAIL}-getrelay_mask requires -P{bcolors.ENDC}")
@@ -97,7 +109,7 @@ if __name__ == '__main__':
         if args.port is None:
             parser.error(f"{bcolors.FAIL}-setpwr_mask requires -P{bcolors.ENDC}")
         else:
-            set_pwr_mask(args.port,args.setpwr_mask)
+            set_pwr_mask(args.port,int(args.setpwr_mask,16))
     elif args.getpwr_mask:
         if args.port is None:
             parser.error(f"{bcolors.FAIL}-getpwr_mask requires -P{bcolors.ENDC}")

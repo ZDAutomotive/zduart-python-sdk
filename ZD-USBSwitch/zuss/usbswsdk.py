@@ -49,18 +49,21 @@ def get_version(dev_port: str):
     serialPort.write(b"<GET_SW_VERSION{}>")
     serialString = ""  # Used to hold data coming over UART
     strData = []
-    res = None
+    res = [None]
 
     while 1 :
         time_end=time.time()
         if (time_end-time_start)>1:
-            return res
+            return res[0]
         # Wait until there is data waiting in the serial buffer
         if serialPort.in_waiting > 0:
             # Read data out of the buffer until a carraige return / new line is found
             serialString = serialPort.readline().decode("Ascii")
-            strData = serialString.strip().lstrip('[GET_SW_VERSION{').rstrip('}]')
-            res = strData.split(' ')
+            
+            # return ok
+            if '[GET_SW_VERSION{v' in serialString:
+                strData = serialString.strip().lstrip('[GET_SW_VERSION{').rstrip('}]')
+                res = strData.split(' ')
 
             # Print the contents of the serial data
             try:
