@@ -53,7 +53,7 @@ def get_version(dev_port: str):
 
     while 1 :
         time_end=time.time()
-        if (time_end-time_start)>1:
+        if (time_end-time_start)>5:
             return res[0]
         # Wait until there is data waiting in the serial buffer
         if serialPort.in_waiting > 0:
@@ -64,6 +64,7 @@ def get_version(dev_port: str):
             if '[GET_SW_VERSION{v' in serialString:
                 strData = serialString.strip().lstrip('[GET_SW_VERSION{').rstrip('}]')
                 res = strData.split(' ')
+                return res[0]
 
             # Print the contents of the serial data
             try:
@@ -110,7 +111,7 @@ def save_config(dev_port: str):
     serialString = ""  # Used to hold data coming over UART
     while 1 :
         time_end=time.time()
-        if (time_end-time_start)>1:
+        if (time_end-time_start)>5:
             return res
         # Wait until there is data waiting in the serial buffer
         if serialPort.in_waiting > 0:
@@ -119,6 +120,7 @@ def save_config(dev_port: str):
             serialString = serialPort.readline().decode("Ascii")
             if "[SAVE_CONFIG{ok}]" in serialString:
                 res =  True
+                return res
             # Print the contents of the serial data
             try:
                 print(serialString)
@@ -140,7 +142,7 @@ def clr_config(dev_port: str):
     serialString = ""  # Used to hold data coming over UART
     while 1 :
         time_end=time.time()
-        if (time_end-time_start)>2:
+        if (time_end-time_start)>5:
             return res
         # Wait until there is data waiting in the serial buffer
         if serialPort.in_waiting > 0:
@@ -149,6 +151,7 @@ def clr_config(dev_port: str):
             serialString = serialPort.readline().decode("Ascii")
             if "[CLEAR_CONFIG{ok}]" in serialString:
                 res =  True
+                return res
             # Print the contents of the serial data
             try:
                 print(serialString)
@@ -169,7 +172,7 @@ def disp_config(dev_port: str):
     serialString = ""  # Used to hold data coming over UART
     while 1 :
         time_end=time.time()
-        if (time_end-time_start)>1:
+        if (time_end-time_start)>5:
             return res
         # Wait until there is data waiting in the serial buffer
         if serialPort.in_waiting > 0:
@@ -178,6 +181,7 @@ def disp_config(dev_port: str):
             serialString = serialPort.readline().decode("Ascii")
             if "[DISP_CONFIG{ok}]" in serialString:
                 res =  True
+                return res
             # Print the contents of the serial data
             try:
                 print(serialString)
@@ -196,7 +200,7 @@ def set_host_port(dev_port: str,port_num:int):
     res = False
     while 1 :
         time_end=time.time()
-        if (time_end-time_start)>2:
+        if (time_end-time_start)>5:
             return res
         # Wait until there is data waiting in the serial buffer
         if serialPort.in_waiting > 0:
@@ -205,6 +209,7 @@ def set_host_port(dev_port: str,port_num:int):
             serialString = serialPort.readline().decode("Ascii")
             if f"[SET_HOST_PORT{{{port_num}}}]" in serialString:
                 res =  True
+                return res
             # Print the contents of the serial data
             try:
                 print(serialString)
@@ -224,7 +229,7 @@ def get_host_port(dev_port: str):
     res = None
     while 1 :
         time_end=time.time()
-        if (time_end-time_start)>1:
+        if (time_end-time_start)>5:
             return res
         # Wait until there is data waiting in the serial buffer
         if serialPort.in_waiting > 0:
@@ -233,6 +238,7 @@ def get_host_port(dev_port: str):
             serialString = serialPort.readline().decode("Ascii")
             if "[GET_HOST_PORT{" in serialString:               
                 res = serialString.strip('[GET_HOST_PORT{')[0]
+                return res
             # Print the contents of the serial data
             try:
                 print(serialString)
@@ -252,7 +258,7 @@ def set_dev_port(dev_port: str,port_num:int):
     res = False
     while 1 :
         time_end=time.time()
-        if (time_end-time_start)>2:
+        if (time_end-time_start)>5:
             return res
         # Wait until there is data waiting in the serial buffer
         if serialPort.in_waiting > 0:
@@ -260,6 +266,7 @@ def set_dev_port(dev_port: str,port_num:int):
             serialString = serialPort.readline().decode("Ascii")
             if f"[SET_DEVICE_PORT{{{port_num}}}]" in serialString:
                 res =  True
+                return res
             # Print the contents of the serial data
             try:
                 print(serialString)
@@ -279,7 +286,7 @@ def get_dev_port(dev_port: str):
     res = None
     while 1 :
         time_end=time.time()
-        if (time_end-time_start)>1:
+        if (time_end-time_start)>5:
             return res
         # Wait until there is data waiting in the serial buffer
         if serialPort.in_waiting > 0:
@@ -289,6 +296,7 @@ def get_dev_port(dev_port: str):
             
             if "[GET_DEVICE_PORT{" in serialString:               
                 res = serialString.lstrip('[GET_DEVICE_PORT{')[0]
+                return res
             # Print the contents of the serial data
             try:
                 print(serialString)
@@ -309,7 +317,7 @@ def set_relay_mask(dev_port: str,mask:int):
     res = False
     while 1 :
         time_end=time.time()
-        if (time_end-time_start)>1:
+        if (time_end-time_start)>5:
             return res
         # Wait until there is data waiting in the serial buffer
         if serialPort.in_waiting > 0:
@@ -317,6 +325,7 @@ def set_relay_mask(dev_port: str,mask:int):
             serialString = serialPort.readline().decode("Ascii")
             if f"[SET_RELAY_MASK{{{hex(mask)}}}]" in serialString:
                 res =  True
+                return res
             # Print the contents of the serial data
             try:
                 print(serialString)
@@ -337,7 +346,7 @@ def get_relay_mask(dev_port: str):
     res = None
     while 1 :
         time_end=time.time()
-        if (time_end-time_start)>1:
+        if (time_end-time_start)>5:
             return res
         # Wait until there is data waiting in the serial buffer
         if serialPort.in_waiting > 0:
@@ -346,6 +355,7 @@ def get_relay_mask(dev_port: str):
             serialString = serialPort.readline().decode("Ascii")
             if "[GET_RELAY_MASK{" in serialString:               
                 res = int(serialString.strip().lstrip('[GET_RELAY_MASK{').rstrip("}]"),0)
+                return res
             # Print the contents of the serial data
             try:
                 print(serialString)
@@ -370,7 +380,7 @@ def set_pwr_mask(dev_port: str,mask:int):
     res = False
     while 1 :
         time_end=time.time()
-        if (time_end-time_start)>1:
+        if (time_end-time_start)>5:
             return res
         # Wait until there is data waiting in the serial buffer
         if serialPort.in_waiting > 0:
@@ -378,6 +388,7 @@ def set_pwr_mask(dev_port: str,mask:int):
             serialString = serialPort.readline().decode("Ascii")
             if f"[SET_POWER_MASK{{{hex(mask)}}}]" in serialString:
                 res =  True
+                return res
             # Print the contents of the serial data
             try:
                 print(serialString)
@@ -401,7 +412,7 @@ def get_pwr_mask(dev_port: str):
     res = None
     while 1 :
         time_end=time.time()
-        if (time_end-time_start)>1:
+        if (time_end-time_start)>5:
             return res
         # Wait until there is data waiting in the serial buffer
         if serialPort.in_waiting > 0:
@@ -410,6 +421,7 @@ def get_pwr_mask(dev_port: str):
             serialString = serialPort.readline().decode("Ascii")
             if "[GET_POWER_MASK{" in serialString:               
                 res = int(serialString.strip().lstrip('[GET_POWER_MASK{').rstrip("}]"),0)
+                return res
             # Print the contents of the serial data
             try:
                 print(serialString)
@@ -431,7 +443,7 @@ def set_relay(dev_port: str,relay_port: int,control: int):
     res = False
     while 1 :
         time_end=time.time()
-        if (time_end-time_start)>1:
+        if (time_end-time_start)>5:
             return res
         # Wait until there is data waiting in the serial buffer
         if serialPort.in_waiting > 0:
@@ -439,6 +451,7 @@ def set_relay(dev_port: str,relay_port: int,control: int):
             serialString = serialPort.readline().decode("Ascii")
             if '[SET_RELAY{'+str(relay_port)+','+str(control)+'}]' in serialString:
                 res =  True
+                return res
             # Print the contents of the serial data
             try:
                 print(serialString)
@@ -461,7 +474,7 @@ def get_relay(dev_port: str,relay_port: int):
     strData = []    
     while 1 :
         time_end=time.time()
-        if (time_end-time_start)>1:
+        if (time_end-time_start)>5:
             return res
         # Wait until there is data waiting in the serial buffer
         if serialPort.in_waiting > 0:
@@ -500,7 +513,7 @@ def set_pwr(dev_port: str,power_device: int,control: int):
     res = False
     while 1 :
         time_end=time.time()
-        if (time_end-time_start)>1:
+        if (time_end-time_start)>5:
             return res
         # Wait until there is data waiting in the serial buffer
         if serialPort.in_waiting > 0:
@@ -508,6 +521,7 @@ def set_pwr(dev_port: str,power_device: int,control: int):
             serialString = serialPort.readline().decode("Ascii")
             if '[SET_POWER{'+str(power_device)+','+str(control)+'}]' in serialString:
                 res =  True
+                return res
             # Print the contents of the serial data
             try:
                 print(serialString)
@@ -530,7 +544,7 @@ def get_pwr(dev_port: str,power_device: int):
     strData = []
     while 1 :
         time_end=time.time()
-        if (time_end-time_start)>1:
+        if (time_end-time_start)>5:
             return res
         # Wait until there is data waiting in the serial buffer
         if serialPort.in_waiting > 0:
