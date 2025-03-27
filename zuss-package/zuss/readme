@@ -1,0 +1,8 @@
+本项目由whl包 unzip  zuss-2.1.2-py3-none-any.whl -d somepackage_source  解压生成
+
+再次打包成whl 需删除 zuss-2.1.2.dist-info/RECORD 文件 原因RECORD 文件存储了 .whl 内所有文件的 SHA256 校验值，如果修改了任何文件（如源码或 METADATA），RECORD 需要重新生成。因此，先删除它：
+
+重新打包 使用  
+pip install wheel  # 确保已安装 wheel
+cd somepackage_source
+python -m wheel pack .
